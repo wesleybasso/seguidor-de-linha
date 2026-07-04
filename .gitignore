@@ -1,0 +1,29 @@
+# Local/generated archives and imported helper bundles
+*.zip
+gemini-code-*.md
+kicad-happy-main/
+PEGASUS_Codex_Package/
+external library/
+
+# KiCad generated outputs and caches
+*.kicad_prl
+*.kicad_pro-bak
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups/
+fp-info-cache
+drc.json
+*.net
+
+# Manufacturing outputs must be generated only after human review
+gerbers/
+Gerbers/
+production/
+manufacturing-output/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

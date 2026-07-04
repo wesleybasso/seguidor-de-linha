@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100mm" height="65mm" viewBox="0 0 100 65">
+<style>
+text{font-family:Arial,sans-serif;font-size:3px;fill:#eee}
+.title{font-size:5px;font-weight:bold}
+.box{stroke:#eee;stroke-width:0.45;fill:#111}
+.line{stroke:#d4af37;stroke-width:0.55;fill:none}
+.dash{stroke:#aaa;stroke-width:0.4;fill:none;stroke-dasharray:1 1}
+</style>
+<rect width="100" height="65" fill="#0b0b0b"/>
+
+<text x="5" y="8" class="title">HDB-001 — Brain Board — 75 x 40 mm</text>
+<rect x="12" y="12" width="75" height="40" rx="2" class="box"/>
+<rect x="18" y="18" width="21" height="18" class="dash"/><text x="21" y="27">XIAO S3</text>
+<rect x="43" y="18" width="36" height="20" class="dash"/><text x="49" y="28">BLACK PILL</text>
+<rect x="18" y="39" width="17" height="8" class="dash"/><text x="20" y="44">BUCK opt.</text>
+<rect x="40" y="49" width="20" height="3" class="line"/><text x="40" y="57">J1 Sensores</text>
+<rect x="64" y="49" width="20" height="3" class="line"/><text x="64" y="57">J2 Comandos</text>
+<circle cx="15" cy="15" r="2" class="line"/><circle cx="84" cy="15" r="2" class="line"/>
+<circle cx="15" cy="49" r="2" class="line"/><circle cx="84" cy="49" r="2" class="line"/>
+
+</svg>
