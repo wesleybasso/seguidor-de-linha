@@ -89,6 +89,16 @@ String telemetry_to_json(const pegasus_telemetry_t &t) {
     s += "\"run_time_ms\":" + String(t.run_time_ms) + ",";
     s += "\"error_flags\":" + String(t.error_flags) + ",";
     s += "\"last_update_age_ms\":" + String(t.last_update_ms == 0 ? 0 : millis() - t.last_update_ms) + ",";
+    s += "\"command_pending\":" + String(t.command_pending ? "true" : "false") + ",";
+    s += "\"pending_command_type\":" + String(t.pending_command_type) + ",";
+    s += "\"last_ack_type\":" + String(t.last_ack_type) + ",";
+    s += "\"last_nack_type\":" + String(t.last_nack_type) + ",";
+    s += "\"last_nack_reason\":" + String(t.last_nack_reason) + ",";
+    s += "\"command_age_ms\":" + String(t.command_pending ? millis() - t.command_sent_ms : 0) + ",";
+    s += "\"last_command_rtt_ms\":" + String(t.last_command_rtt_ms) + ",";
+    s += "\"ack_count\":" + String(t.ack_count) + ",";
+    s += "\"nack_count\":" + String(t.nack_count) + ",";
+    s += "\"pong_count\":" + String(t.pong_count) + ",";
     s += "\"front_raw\":[";
     for (uint8_t i = 0; i < 8; ++i) {
         if (i) s += ",";

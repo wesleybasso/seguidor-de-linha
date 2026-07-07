@@ -95,6 +95,8 @@ static const char PEGASUS_WEB_UI[] PROGMEM = R"HTML(
         </div></section>
         <section class="panel"><div class="ph"><h2>Sistema</h2><span class="sub">config</span></div><div class="body health">
           <div><span>STM32 UART</span><strong id="uartHealth" class="danger">offline</strong></div>
+          <div><span>Comando</span><strong id="cmdHealth">idle</strong></div>
+          <div><span>ACK/NACK/PONG</span><strong id="ackHealth">0/0/0</strong></div>
           <div><span>Error flags</span><strong id="errors">0x00000000</strong></div>
           <button id="save" type="button">Salvar NVS</button>
           <pre id="config" class="raw"></pre>
@@ -120,6 +122,9 @@ async function refresh(){
     $('piderr').textContent=(t.pid_error>0?'+':'')+(t.pid_error||0);$('pos').textContent=t.line_position||0;
     $('pwmL').textContent=t.pwm_left||0;$('pwmR').textContent=t.pwm_right||0;$('fan').textContent=t.fan_pwm||0;
     $('errors').textContent='0x'+String((t.error_flags||0).toString(16)).padStart(8,'0');
+    $('cmdHealth').textContent=t.command_pending?'pending '+(t.command_age_ms||0)+'ms':'rtt '+(t.last_command_rtt_ms||0)+'ms';
+    cls($('cmdHealth'),t.command_pending&&t.command_age_ms>250?'warn':'ok');
+    $('ackHealth').textContent=(t.ack_count||0)+'/'+(t.nack_count||0)+'/'+(t.pong_count||0);
     $('lineFlags').textContent=(t.line_detected?'LINE ':'NO LINE ')+(t.crossing_detected?'CROSS ':'')+(t.line_lost?'LOST':'');
     track.style.setProperty('--line-x',Math.max(-38,Math.min(38,(t.line_position||0)/20))+'px');
     $('latL').textContent=t.lat_l_norm||0;$('latR').textContent=t.lat_r_norm||0;cls($('latLled'),'led '+(t.lat_l_active?'':'off'));cls($('latRled'),'led '+(t.lat_r_active?'':'off'));

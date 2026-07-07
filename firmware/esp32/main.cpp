@@ -21,6 +21,35 @@ static pegasus_config_t config;
 static run_summary_t run_summary;
 static bool uart_enabled = false;
 
+static void apply_link_response(const pegasus::Packet &packet) {
+    const uint32_t now = millis();
+    const uint8_t about = packet.len > 0 ? packet.payload[0] : 0;
+    const uint8_t reason = packet.len > 1 ? packet.payload[1] : 0;
+
+    if (packet.type == pegasus::MSG_ACK) {
+        telemetry.last_ack_type = about;
+        telemetry.ack_count++;
+        if (telemetry.command_pending && telemetry.pending_command_type == about) {
+            telemetry.command_pending = false;
+            telemetry.last_command_rtt_ms = now - telemetry.command_sent_ms;
+        }
+    } else if (packet.type == pegasus::MSG_NACK) {
+        telemetry.last_nack_type = about;
+        telemetry.last_nack_reason = reason;
+        telemetry.nack_count++;
+        if (telemetry.command_pending && telemetry.pending_command_type == about) {
+            telemetry.command_pending = false;
+            telemetry.last_command_rtt_ms = now - telemetry.command_sent_ms;
+        }
+    } else if (packet.type == pegasus::MSG_PONG) {
+        telemetry.pong_count++;
+        if (telemetry.command_pending && telemetry.pending_command_type == pegasus::MSG_PING) {
+            telemetry.command_pending = false;
+            telemetry.last_command_rtt_ms = now - telemetry.command_sent_ms;
+        }
+    }
+}
+
 static uint8_t command_type(pegasus_command_kind_t kind) {
     using namespace pegasus;
     switch (kind) {
@@ -49,7 +78,11 @@ static void uart_rx_task(void *) {
         }
         while (Stm32Serial.available() > 0) {
             if (parser.push(static_cast<uint8_t>(Stm32Serial.read()), packet)) {
-                telemetry_apply_packet(packet.type, packet.payload, packet.len, telemetry);
+                if (packet.type == pegasus::MSG_ACK || packet.type == pegasus::MSG_NACK || packet.type == pegasus::MSG_PONG) {
+                    apply_link_response(packet);
+                } else {
+                    telemetry_apply_packet(packet.type, packet.payload, packet.len, telemetry);
+                }
                 stm32_watchdog.mark_packet(millis());
                 xQueueSend(telemetry_queue, &telemetry, 0);
                 if (packet.type == pegasus::MSG_TELEMETRY_BASIC) {
@@ -66,7 +99,12 @@ static void uart_tx_task(void *) {
     for (;;) {
         if (xQueueReceive(command_queue, &cmd, portMAX_DELAY) == pdTRUE) {
             if (uart_enabled) {
-                pegasus::write_packet(Stm32Serial, command_type(cmd.kind), cmd.payload, cmd.len);
+                const uint8_t type = command_type(cmd.kind);
+                if (pegasus::write_packet(Stm32Serial, type, cmd.payload, cmd.len)) {
+                    telemetry.pending_command_type = type;
+                    telemetry.command_pending = true;
+                    telemetry.command_sent_ms = millis();
+                }
             }
         }
     }

@@ -111,6 +111,24 @@ u16 fan_start_delay_ms
 u8  fan_mode
 ```
 
+### `ACK`, `NACK` e `PONG` - 2 bytes
+
+```text
+u8 about_type
+u8 reason_code
+```
+
+Uso:
+
+- `ACK`: `about_type` e o comando aceito; `reason_code = 0`.
+- `NACK`: `about_type` e o comando recusado; `reason_code = 0` na Rev A0,
+  reservado para codigos futuros.
+- `PONG`: `about_type = PING`; `reason_code = 0`.
+
+Observacao: comandos simples (`ARM`, `DISARM`, `START_RUN`, `STOP_RUN`,
+`CALIBRATION_START`, `CALIBRATION_STOP`, `HARDWARE_TEST`, `PING`) usam payload
+vazio no sentido ESP32 -> STM32. Payload extra deve gerar `NACK`.
+
 ## Regras
 
 - O ESP32 nunca gera PWM real de motores.

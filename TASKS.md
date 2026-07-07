@@ -19,8 +19,10 @@ Atualizado: 2026-07-06.
 - [x] Proteger encoder UART contra payload nulo invalido.
 - [x] Fazer ARM/START/DISARM/CAL responder ACK/NACK conforme estado valido.
 - [x] Portar cockpit compacto para `firmware/esp32/web/web_ui.h`.
+- [x] Rastrear no ESP32 ultimo ACK/NACK/PONG, comando pendente e RTT simples.
 - [ ] Implementar command manager ESP32 com ACK/NACK, timeout, retry e RTT.
-- [ ] Mostrar no dashboard: ultimo ACK/NACK, timeout, RTT, idade da telemetria.
+- [ ] Implementar retry/timeout ativo para comando pendente no ESP32.
+- [x] Mostrar no dashboard: contadores ACK/NACK/PONG, RTT e idade da telemetria.
 - [ ] Adicionar mutex ou snapshot atomico para telemetry/config/log no ESP32.
 - [x] Trocar validacoes STM32 para tamanho exato quando aplicavel.
 - [x] Clampar PID, motor, fan e `fan_mode` antes de aplicar configuracao.

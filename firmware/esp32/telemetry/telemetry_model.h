@@ -29,6 +29,17 @@ struct pegasus_telemetry_t {
     uint32_t run_time_ms = 0;
     uint32_t error_flags = 0;
     uint32_t last_update_ms = 0;
+
+    bool command_pending = false;
+    uint8_t pending_command_type = 0;
+    uint8_t last_ack_type = 0;
+    uint8_t last_nack_type = 0;
+    uint8_t last_nack_reason = 0;
+    uint32_t command_sent_ms = 0;
+    uint32_t last_command_rtt_ms = 0;
+    uint32_t ack_count = 0;
+    uint32_t nack_count = 0;
+    uint32_t pong_count = 0;
 };
 
 const char *robot_state_name(robot_state_t state);
