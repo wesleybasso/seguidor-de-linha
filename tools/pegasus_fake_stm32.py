@@ -42,7 +42,15 @@ class FakeRobot:
         self.run_start = 0.0
         self.phase = 0
 
-    def handle(self, msg_type):
+    def handle(self, msg_type, payload=b""):
+        simple_empty = {
+            pp.MSG_PING, pp.MSG_CALIBRATION_START, pp.MSG_CALIBRATION_STOP,
+            pp.MSG_ARM, pp.MSG_DISARM, pp.MSG_START_RUN, pp.MSG_STOP_RUN,
+            pp.MSG_HARDWARE_TEST,
+        }
+        if msg_type in simple_empty and payload:
+            return pp.MSG_NACK
+
         if msg_type == pp.MSG_PING:
             return pp.MSG_PONG
         if msg_type == pp.MSG_CALIBRATION_START:
@@ -109,9 +117,9 @@ def main():
         for byte in ser.read(256):
             result = parser.push(byte)
             if result:
-                msg_type, _ = result
+                msg_type, payload = result
                 name = pp.MSG_NAMES.get(msg_type, hex(msg_type))
-                reply = robot.handle(msg_type)
+                reply = robot.handle(msg_type, payload)
                 ser.write(pp.encode_packet(reply, bytes([msg_type, 0])))
                 print(f"RX {name} -> TX {pp.MSG_NAMES[reply]}")
 

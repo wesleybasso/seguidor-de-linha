@@ -12,6 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 
 import pegasus_protocol as pp  # noqa: E402
+from pegasus_fake_stm32 import FakeRobot, ROBOT_ARMED, ROBOT_RUNNING, ROBOT_SAFE_STOP  # noqa: E402
 
 
 class TestCrc8(unittest.TestCase):
@@ -103,6 +104,29 @@ class TestRobustez(unittest.TestCase):
         stream = pp.encode_packet(pp.MSG_PING) + pp.encode_packet(pp.MSG_ARM)
         decodificados = [r for b in stream for r in [parser.push(b)] if r]
         self.assertEqual(decodificados, [(pp.MSG_PING, b""), (pp.MSG_ARM, b"")])
+
+
+class TestFakeStm32Contract(unittest.TestCase):
+    def test_start_fora_de_armed_retorna_nack(self):
+        robot = FakeRobot()
+        self.assertEqual(robot.handle(pp.MSG_START_RUN), pp.MSG_NACK)
+
+    def test_arm_start_stop_fluxo_basico(self):
+        robot = FakeRobot()
+        self.assertEqual(robot.handle(pp.MSG_ARM), pp.MSG_ACK)
+        self.assertEqual(robot.state, ROBOT_ARMED)
+        self.assertEqual(robot.handle(pp.MSG_START_RUN), pp.MSG_ACK)
+        self.assertEqual(robot.state, ROBOT_RUNNING)
+        self.assertEqual(robot.handle(pp.MSG_STOP_RUN), pp.MSG_ACK)
+        self.assertEqual(robot.state, ROBOT_SAFE_STOP)
+
+    def test_payload_extra_em_comando_simples_retorna_nack(self):
+        robot = FakeRobot()
+        self.assertEqual(robot.handle(pp.MSG_ARM, b"\x01"), pp.MSG_NACK)
+
+    def test_ping_retorna_pong(self):
+        robot = FakeRobot()
+        self.assertEqual(robot.handle(pp.MSG_PING), pp.MSG_PONG)
 
 
 if __name__ == "__main__":
