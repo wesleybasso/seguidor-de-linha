@@ -21,6 +21,7 @@ Atualizado: 2026-07-06.
 - [x] Portar cockpit compacto para `firmware/esp32/web/web_ui.h`.
 - [x] Rastrear no ESP32 ultimo ACK/NACK/PONG, comando pendente e RTT simples.
 - [x] Criar build real STM32 F411 com `build.ps1`, `Makefile` e HAL `PEGASUS_TARGET_F411`.
+- [x] Criar runbook F0 de bancada com ligacao, build, dashboard e criterios de aceite.
 - [ ] Implementar command manager ESP32 com ACK/NACK, timeout, retry e RTT.
 - [ ] Implementar retry/timeout ativo para comando pendente no ESP32.
 - [x] Mostrar no dashboard: contadores ACK/NACK/PONG, RTT e idade da telemetria.
