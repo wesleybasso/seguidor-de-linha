@@ -28,13 +28,17 @@ static int16_t read_i16_le(const uint8_t *p) {
     return (int16_t)((uint16_t)p[0] | ((uint16_t)p[1] << 8));
 }
 
+static uint16_t read_u16_le(const uint8_t *p) {
+    return (uint16_t)((uint16_t)p[0] | ((uint16_t)p[1] << 8));
+}
+
 static void handle_packet(const pegasus_packet_t *packet) {
     g_robot.last_esp_packet_ms = pegasus_hal_millis();
     g_robot.esp_online = true;
 
     switch (packet->type) {
     case MSG_SET_PID:
-        if (packet->len >= 12) {
+        if (packet->len == 12) {
             g_robot.config.kp = read_float_le(&packet->payload[0]);
             g_robot.config.ki = read_float_le(&packet->payload[4]);
             g_robot.config.kd = read_float_le(&packet->payload[8]);
@@ -45,7 +49,7 @@ static void handle_packet(const pegasus_packet_t *packet) {
         }
         break;
     case MSG_SET_MOTOR_CONFIG:
-        if (packet->len >= 10) {
+        if (packet->len == 10) {
             g_robot.config.base_speed = read_i16_le(&packet->payload[0]);
             g_robot.config.pwm_min_left = read_i16_le(&packet->payload[2]);
             g_robot.config.pwm_min_right = read_i16_le(&packet->payload[4]);
@@ -58,11 +62,11 @@ static void handle_packet(const pegasus_packet_t *packet) {
         }
         break;
     case MSG_SET_FAN_CONFIG:
-        if (packet->len >= 9) {
-            g_robot.config.fan_pwm_start = (uint16_t)read_i16_le(&packet->payload[0]);
-            g_robot.config.fan_pwm_run = (uint16_t)read_i16_le(&packet->payload[2]);
-            g_robot.config.fan_pwm_max = (uint16_t)read_i16_le(&packet->payload[4]);
-            g_robot.config.fan_start_delay_ms = (uint16_t)read_i16_le(&packet->payload[6]);
+        if (packet->len == 9) {
+            g_robot.config.fan_pwm_start = read_u16_le(&packet->payload[0]);
+            g_robot.config.fan_pwm_run = read_u16_le(&packet->payload[2]);
+            g_robot.config.fan_pwm_max = read_u16_le(&packet->payload[4]);
+            g_robot.config.fan_start_delay_ms = read_u16_le(&packet->payload[6]);
             g_robot.config.fan_mode = packet->payload[8];
             robot_config_finalize(&g_robot.config);
             send_simple(MSG_ACK, packet->type);
@@ -93,6 +97,13 @@ static void handle_packet(const pegasus_packet_t *packet) {
     case MSG_STOP_RUN:
         robot_request_stop(&g_robot);
         send_simple(MSG_ACK, packet->type);
+        break;
+    case MSG_HARDWARE_TEST:
+        if (robot_request_hardware_test(&g_robot, pegasus_hal_millis())) {
+            send_simple(MSG_ACK, packet->type);
+        } else {
+            send_simple(MSG_NACK, packet->type);
+        }
         break;
     case MSG_PING:
         send_simple(MSG_PONG, packet->type);

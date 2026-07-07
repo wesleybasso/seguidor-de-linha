@@ -49,6 +49,8 @@ void robot_request_stop(robot_context_t *ctx);
 void robot_request_arm(robot_context_t *ctx);
 void robot_request_disarm(robot_context_t *ctx);
 void robot_request_start(robot_context_t *ctx);
+/* Returns false when the state machine refuses the bench test (safety). */
+bool robot_request_hardware_test(robot_context_t *ctx, uint32_t now_ms);
 const motor_state_t *robot_motor_state(void);
 const fan_state_t *robot_fan_state(void);
 void robot_begin_calibration(robot_context_t *ctx, uint32_t now_ms);

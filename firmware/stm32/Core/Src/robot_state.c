@@ -47,6 +47,14 @@ void robot_request_start(robot_context_t *ctx) {
     ctx->start_requested = true;
 }
 
+bool robot_request_hardware_test(robot_context_t *ctx, uint32_t now_ms) {
+    if (ctx->state != ST_IDLE && ctx->state != ST_READY) {
+        return false;
+    }
+    robot_set_state(ctx, ST_HARDWARE_TEST, now_ms);
+    return true;
+}
+
 void robot_begin_calibration(robot_context_t *ctx, uint32_t now_ms) {
     calibration_begin(&g_calibration, &ctx->sensors, now_ms);
     robot_set_state(ctx, ST_CALIBRATION, now_ms);

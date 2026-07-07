@@ -2,6 +2,25 @@
 #include <string.h>
 
 #define PEGASUS_CONFIG_VERSION 0xA0000001u
+#define PEGASUS_PWM_LIMIT 1000
+#define PEGASUS_FAN_DELAY_LIMIT_MS 5000u
+
+static float clamp_float(float value, float lo, float hi) {
+    if (value != value) return lo;
+    if (value < lo) return lo;
+    if (value > hi) return hi;
+    return value;
+}
+
+static int16_t clamp_i16(int16_t value, int16_t lo, int16_t hi) {
+    if (value < lo) return lo;
+    if (value > hi) return hi;
+    return value;
+}
+
+static uint16_t clamp_u16(uint16_t value, uint16_t hi) {
+    return value > hi ? hi : value;
+}
 
 robot_config_t robot_default_config(void) {
     robot_config_t c;
@@ -63,6 +82,26 @@ bool robot_config_valid(const robot_config_t *config) {
 }
 
 void robot_config_finalize(robot_config_t *config) {
+    config->kp = clamp_float(config->kp, 0.0f, 20.0f);
+    config->ki = clamp_float(config->ki, 0.0f, 10.0f);
+    config->kd = clamp_float(config->kd, 0.0f, 20.0f);
+    config->integral_limit = clamp_float(config->integral_limit, 0.0f, 5000.0f);
+    config->derivative_filter = clamp_float(config->derivative_filter, 0.0f, 1.0f);
+
+    config->base_speed = clamp_i16(config->base_speed, -PEGASUS_PWM_LIMIT, PEGASUS_PWM_LIMIT);
+    config->pwm_min_left = clamp_i16(config->pwm_min_left, 0, PEGASUS_PWM_LIMIT);
+    config->pwm_min_right = clamp_i16(config->pwm_min_right, 0, PEGASUS_PWM_LIMIT);
+    config->pwm_max_left = clamp_i16(config->pwm_max_left, 0, PEGASUS_PWM_LIMIT);
+    config->pwm_max_right = clamp_i16(config->pwm_max_right, 0, PEGASUS_PWM_LIMIT);
+    if (config->pwm_min_left > config->pwm_max_left) config->pwm_min_left = config->pwm_max_left;
+    if (config->pwm_min_right > config->pwm_max_right) config->pwm_min_right = config->pwm_max_right;
+
+    config->fan_pwm_max = clamp_u16(config->fan_pwm_max, PEGASUS_PWM_LIMIT);
+    config->fan_pwm_start = clamp_u16(config->fan_pwm_start, config->fan_pwm_max);
+    config->fan_pwm_run = clamp_u16(config->fan_pwm_run, config->fan_pwm_max);
+    config->fan_start_delay_ms = clamp_u16(config->fan_start_delay_ms, PEGASUS_FAN_DELAY_LIMIT_MS);
+    if (config->fan_mode > FAN_MODE_ESC_SERVO) config->fan_mode = FAN_MODE_OFF;
+
     config->config_version = PEGASUS_CONFIG_VERSION;
     config->checksum = 0;
     config->checksum = robot_config_checksum(config);

@@ -38,6 +38,8 @@ void register_api_routes(WebServer &server, pegasus_telemetry_t &telemetry, pega
         else if (c == "stop") queue_simple_command(CMD_STOP_RUN);
         else if (c == "cal_start") queue_simple_command(CMD_CALIBRATION_START);
         else if (c == "cal_stop") queue_simple_command(CMD_CALIBRATION_STOP);
+        else if (c == "ping") queue_simple_command(CMD_PING);
+        else if (c == "hw_test") queue_simple_command(CMD_HARDWARE_TEST);
         else {
             server.send(400, "text/plain", "unknown command");
             return;
