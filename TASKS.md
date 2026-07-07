@@ -20,6 +20,7 @@ Atualizado: 2026-07-06.
 - [x] Fazer ARM/START/DISARM/CAL responder ACK/NACK conforme estado valido.
 - [x] Portar cockpit compacto para `firmware/esp32/web/web_ui.h`.
 - [x] Rastrear no ESP32 ultimo ACK/NACK/PONG, comando pendente e RTT simples.
+- [x] Criar build real STM32 F411 com `build.ps1`, `Makefile` e HAL `PEGASUS_TARGET_F411`.
 - [ ] Implementar command manager ESP32 com ACK/NACK, timeout, retry e RTT.
 - [ ] Implementar retry/timeout ativo para comando pendente no ESP32.
 - [x] Mostrar no dashboard: contadores ACK/NACK/PONG, RTT e idade da telemetria.
@@ -27,7 +28,7 @@ Atualizado: 2026-07-06.
 - [x] Trocar validacoes STM32 para tamanho exato quando aplicavel.
 - [x] Clampar PID, motor, fan e `fan_mode` antes de aplicar configuracao.
 - [ ] Definir payload seguro de `HARDWARE_TEST`.
-- [ ] Criar HAL minima STM32Cube: USART1 PA9/PA10, SysTick, ring buffer.
+- [x] Criar HAL minima register-level: USART1 PA9/PA10, SysTick, ADC/DMA, PWM, GPIO e watchdog.
 - [ ] Testar `PING/PONG` por 1000 ciclos no hardware real.
 - [ ] Testar START/STOP/ARM/CALIBRATION no hardware real.
 - [ ] Exibir sensores fake no dashboard via hardware real por 10 minutos.

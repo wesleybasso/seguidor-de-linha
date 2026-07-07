@@ -16,6 +16,25 @@ Firmware do piloto em tempo real do PEGASUS.
 - UART com ESP32 usando `SOF/TYPE/LEN/PAYLOAD/CRC8`.
 - Telemetria basica e sensores.
 
+## Build Black Pill Real
+
+No Windows:
+
+```powershell
+cd firmware/stm32
+powershell -ExecutionPolicy Bypass -File .\build.ps1
+```
+
+Saidas geradas em `firmware/stm32/build/`:
+
+- `firmware.elf`
+- `firmware.bin`
+- `firmware.map`
+
+O build usa `PEGASUS_TARGET_F411`, CMSIS, startup `startup_stm32f411xe.s`,
+linker `STM32F411CEUX_FLASH.ld` e a HAL register-level
+`Core/Src/pegasus_hal_f411.c`.
+
 ## Integracao Com STM32Cube
 
 Os arquivos em `Core/Src` e `Core/Inc` foram escritos para serem levados para um projeto STM32CubeIDE.
