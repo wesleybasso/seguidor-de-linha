@@ -46,9 +46,9 @@ void robot_init(robot_context_t *ctx);
 void robot_control_tick(robot_context_t *ctx, uint32_t now_ms);
 void robot_set_state(robot_context_t *ctx, robot_state_t state, uint32_t now_ms);
 void robot_request_stop(robot_context_t *ctx);
-void robot_request_arm(robot_context_t *ctx);
-void robot_request_disarm(robot_context_t *ctx);
-void robot_request_start(robot_context_t *ctx);
+bool robot_request_arm(robot_context_t *ctx);
+bool robot_request_disarm(robot_context_t *ctx);
+bool robot_request_start(robot_context_t *ctx);
 /* Returns false when the state machine refuses the bench test (safety). */
 bool robot_request_hardware_test(robot_context_t *ctx, uint32_t now_ms);
 const motor_state_t *robot_motor_state(void);

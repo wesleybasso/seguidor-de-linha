@@ -82,10 +82,13 @@ String telemetry_to_json(const pegasus_telemetry_t &t) {
     s += "\"line_lost\":" + String(t.line_lost ? "true" : "false") + ",";
     s += "\"line_position\":" + String(t.line_position) + ",";
     s += "\"pid_error\":" + String(t.pid_error) + ",";
+    s += "\"pid_correction\":" + String(t.pid_correction) + ",";
     s += "\"pwm_left\":" + String(t.pwm_left) + ",";
     s += "\"pwm_right\":" + String(t.pwm_right) + ",";
     s += "\"fan_pwm\":" + String(t.fan_pwm) + ",";
     s += "\"run_time_ms\":" + String(t.run_time_ms) + ",";
+    s += "\"error_flags\":" + String(t.error_flags) + ",";
+    s += "\"last_update_age_ms\":" + String(t.last_update_ms == 0 ? 0 : millis() - t.last_update_ms) + ",";
     s += "\"front_raw\":[";
     for (uint8_t i = 0; i < 8; ++i) {
         if (i) s += ",";
@@ -96,6 +99,10 @@ String telemetry_to_json(const pegasus_telemetry_t &t) {
         if (i) s += ",";
         s += String(t.front_norm[i]);
     }
-    s += "]}";
+    s += "],\"lat_l_raw\":" + String(t.lat_l_raw) + ",";
+    s += "\"lat_l_norm\":" + String(t.lat_l_norm) + ",";
+    s += "\"lat_r_raw\":" + String(t.lat_r_raw) + ",";
+    s += "\"lat_r_norm\":" + String(t.lat_r_norm);
+    s += "}";
     return s;
 }

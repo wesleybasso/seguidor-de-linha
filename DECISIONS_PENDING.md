@@ -21,10 +21,10 @@ Atualizado: 2026-07-06.
 
 - Implementar transacao real de comando no ESP32: comando pendente, ACK/NACK,
   timeout, retry, RTT e ultimo erro.
-- Garantir STOP fora da fila comum e com prioridade maxima.
+- Confirmar em hardware que STOP fora da fila comum corta PWM/STBY/fan no tempo
+  maximo definido.
 - Integrar HAL real minima no STM32 para UART, tick e watchdog.
 - Definir payload de `HARDWARE_TEST`: alvo, PWM, duracao, direcao e timeout.
-- Clampar faixas de PID, motor e fan no STM32.
 - Resolver divergencia entre requisito de loop/sensores `>= 1 kHz` e
   `PEGASUS_CONTROL_HZ 500`.
 
@@ -40,9 +40,9 @@ Atualizado: 2026-07-06.
 
 ## P2 - Dashboard
 
-- Transformar mockup HTML em fonte de design, sem copiar tudo para `web_ui.h`.
+- Manter mockup HTML como visual source e gerar versao embarcada enxuta em
+  `web_ui.h`.
 - Criar modo Bring-up com checklist guiado.
 - Mostrar idade da telemetria, ultimo pacote, stale/timeout, ACK/NACK e RTT.
 - Habilitar/desabilitar botoes conforme estado STM32.
 - Expor `/api/summary` e `/api/analyze` na UI.
-

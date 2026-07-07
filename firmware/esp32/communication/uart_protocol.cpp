@@ -14,7 +14,9 @@ uint8_t crc8(const uint8_t *data, size_t len) {
 }
 
 bool encode_packet(uint8_t type, const uint8_t *payload, uint8_t len, uint8_t *out, size_t out_capacity, size_t *out_len) {
-    if (len > kMaxPayloadLen || out_capacity < static_cast<size_t>(len) + 4) {
+    if (out == nullptr || out_len == nullptr || len > kMaxPayloadLen ||
+        (len > 0 && payload == nullptr) ||
+        out_capacity < static_cast<size_t>(len) + 4) {
         return false;
     }
 

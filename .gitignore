@@ -28,5 +28,6 @@ desktop.ini
 .vscode/
 .idea/
 .pio/
+firmware/stm32/build/
 __pycache__/
 *.py[cod]

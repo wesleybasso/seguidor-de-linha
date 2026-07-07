@@ -14,8 +14,12 @@ Atualizado: 2026-07-06.
 - [x] Criar emulador de STM32 em `tools/pegasus_fake_stm32.py`.
 - [x] Criar testes Python de protocolo em `tests/protocol`.
 - [x] Tratar `HARDWARE_TEST` no STM32 com ACK somente em IDLE/READY.
+- [x] Fazer STOP entrar na frente da fila de comandos do ESP32.
+- [x] Rejeitar payload extra em comandos simples STM32.
+- [x] Proteger encoder UART contra payload nulo invalido.
+- [x] Fazer ARM/START/DISARM/CAL responder ACK/NACK conforme estado valido.
+- [x] Portar cockpit compacto para `firmware/esp32/web/web_ui.h`.
 - [ ] Implementar command manager ESP32 com ACK/NACK, timeout, retry e RTT.
-- [ ] Fazer STOP sair por caminho prioritario, fora da fila comum.
 - [ ] Mostrar no dashboard: ultimo ACK/NACK, timeout, RTT, idade da telemetria.
 - [ ] Adicionar mutex ou snapshot atomico para telemetry/config/log no ESP32.
 - [x] Trocar validacoes STM32 para tamanho exato quando aplicavel.
@@ -53,6 +57,8 @@ Atualizado: 2026-07-06.
 - [ ] Escolher ESP32 definitivo: XIAO ESP32-S3, XIAO ESP32-S3 Plus ou ESP32-S3-Zero.
 - [ ] Medir todos os modulos com paquimetro.
 - [ ] Substituir footprints placeholder por footprints reais.
+- [x] Adicionar header roteado JSENS na HDB-101 para adaptador Rev A0 em ordem HPS.
+- [x] Marcar J3 da HDB-001 como header de bancada SWD/UART para ESP32-S3-Zero.
 - [ ] Criar esquematico eletrico real da HDB-001.
 - [ ] Ligar UART STM32 PA9/PA10 ao ESP32 definitivo.
 - [ ] Definir conectores reais de J1/J2, motores, fan/ESC, sensor, XT30 e chave.

@@ -32,6 +32,14 @@ static uint16_t read_u16_le(const uint8_t *p) {
     return (uint16_t)((uint16_t)p[0] | ((uint16_t)p[1] << 8));
 }
 
+static bool require_empty_payload(const pegasus_packet_t *packet) {
+    if (packet->len == 0) {
+        return true;
+    }
+    send_simple(MSG_NACK, packet->type);
+    return false;
+}
+
 static void handle_packet(const pegasus_packet_t *packet) {
     g_robot.last_esp_packet_ms = pegasus_hal_millis();
     g_robot.esp_online = true;
@@ -75,30 +83,42 @@ static void handle_packet(const pegasus_packet_t *packet) {
         }
         break;
     case MSG_CALIBRATION_START:
-        robot_begin_calibration(&g_robot, pegasus_hal_millis());
-        send_simple(MSG_ACK, packet->type);
+        if (!require_empty_payload(packet)) break;
+        if (g_robot.state == ST_IDLE || g_robot.state == ST_READY) {
+            robot_begin_calibration(&g_robot, pegasus_hal_millis());
+            send_simple(MSG_ACK, packet->type);
+        } else {
+            send_simple(MSG_NACK, packet->type);
+        }
         break;
     case MSG_CALIBRATION_STOP:
-        robot_finish_calibration(&g_robot, pegasus_hal_millis());
-        send_simple(MSG_ACK, packet->type);
+        if (!require_empty_payload(packet)) break;
+        if (g_robot.state == ST_CALIBRATION) {
+            robot_finish_calibration(&g_robot, pegasus_hal_millis());
+            send_simple(MSG_ACK, packet->type);
+        } else {
+            send_simple(MSG_NACK, packet->type);
+        }
         break;
     case MSG_ARM:
-        robot_request_arm(&g_robot);
-        send_simple(MSG_ACK, packet->type);
+        if (!require_empty_payload(packet)) break;
+        send_simple(robot_request_arm(&g_robot) ? MSG_ACK : MSG_NACK, packet->type);
         break;
     case MSG_DISARM:
-        robot_request_disarm(&g_robot);
-        send_simple(MSG_ACK, packet->type);
+        if (!require_empty_payload(packet)) break;
+        send_simple(robot_request_disarm(&g_robot) ? MSG_ACK : MSG_NACK, packet->type);
         break;
     case MSG_START_RUN:
-        robot_request_start(&g_robot);
-        send_simple(MSG_ACK, packet->type);
+        if (!require_empty_payload(packet)) break;
+        send_simple(robot_request_start(&g_robot) ? MSG_ACK : MSG_NACK, packet->type);
         break;
     case MSG_STOP_RUN:
+        if (!require_empty_payload(packet)) break;
         robot_request_stop(&g_robot);
         send_simple(MSG_ACK, packet->type);
         break;
     case MSG_HARDWARE_TEST:
+        if (!require_empty_payload(packet)) break;
         if (robot_request_hardware_test(&g_robot, pegasus_hal_millis())) {
             send_simple(MSG_ACK, packet->type);
         } else {
@@ -106,6 +126,7 @@ static void handle_packet(const pegasus_packet_t *packet) {
         }
         break;
     case MSG_PING:
+        if (!require_empty_payload(packet)) break;
         send_simple(MSG_PONG, packet->type);
         break;
     default:

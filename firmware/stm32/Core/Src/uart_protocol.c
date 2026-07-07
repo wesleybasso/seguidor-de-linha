@@ -21,13 +21,14 @@ uint8_t pegasus_crc8(const uint8_t *data, size_t len) {
 }
 
 bool pegasus_encode_packet(uint8_t type, const uint8_t *payload, uint8_t len, uint8_t *out, size_t out_capacity, size_t *out_len) {
-    if (len > PEGASUS_UART_MAX_PAYLOAD || out_capacity < (size_t)len + 4u) {
+    if (out == NULL || out_len == NULL || len > PEGASUS_UART_MAX_PAYLOAD ||
+        (len > 0 && payload == NULL) || out_capacity < (size_t)len + 4u) {
         return false;
     }
     out[0] = PEGASUS_UART_SOF;
     out[1] = type;
     out[2] = len;
-    if (len > 0 && payload != NULL) {
+    if (len > 0) {
         memcpy(&out[3], payload, len);
     }
     out[3u + len] = pegasus_crc8(&out[1], (size_t)len + 2u);

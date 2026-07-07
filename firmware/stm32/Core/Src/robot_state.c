@@ -32,19 +32,34 @@ void robot_set_state(robot_context_t *ctx, robot_state_t state, uint32_t now_ms)
 }
 
 void robot_request_stop(robot_context_t *ctx) {
+    ctx->arm_requested = false;
+    ctx->start_requested = false;
+    ctx->disarm_requested = false;
     ctx->stop_requested = true;
 }
 
-void robot_request_arm(robot_context_t *ctx) {
+bool robot_request_arm(robot_context_t *ctx) {
+    if (ctx->state != ST_IDLE && ctx->state != ST_READY) {
+        return false;
+    }
     ctx->arm_requested = true;
+    return true;
 }
 
-void robot_request_disarm(robot_context_t *ctx) {
+bool robot_request_disarm(robot_context_t *ctx) {
+    if (ctx->state != ST_ARMED && ctx->state != ST_SAFE_STOP) {
+        return false;
+    }
     ctx->disarm_requested = true;
+    return true;
 }
 
-void robot_request_start(robot_context_t *ctx) {
+bool robot_request_start(robot_context_t *ctx) {
+    if (ctx->state != ST_ARMED) {
+        return false;
+    }
     ctx->start_requested = true;
+    return true;
 }
 
 bool robot_request_hardware_test(robot_context_t *ctx, uint32_t now_ms) {
