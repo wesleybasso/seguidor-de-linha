@@ -1,6 +1,6 @@
 # TASKS.md - PEGASUS Rev A0
 
-Atualizado: 2026-07-06.
+Atualizado: 2026-07-08.
 
 ## Fase 0 - Protoboard Sem Motores
 
@@ -63,10 +63,13 @@ Atualizado: 2026-07-06.
 - [ ] Substituir footprints placeholder por footprints reais.
 - [x] Adicionar header roteado JSENS na HDB-101 para adaptador Rev A0 em ordem HPS.
 - [x] Marcar J3 da HDB-001 como header de bancada SWD/UART para ESP32-S3-Zero.
+- [x] Adicionar placeholders HDB-100 para JBAT, SW_PWR, CBULK1, J_ML, J_MR e J_FAN.
+- [x] Separar `VBAT_RAW` de `VMOTOR` na maquete KiCad da HDB-100.
 - [ ] Criar esquematico eletrico real da HDB-001.
 - [ ] Ligar UART STM32 PA9/PA10 ao ESP32 definitivo.
 - [ ] Definir conectores reais de J1/J2, motores, fan/ESC, sensor, XT30 e chave.
 - [ ] Criar esquematico eletrico real da HDB-100.
+- [ ] Conferir colisao mecanica entre bateria, CBULK1, JBAT, SW_PWR e Brain Board em impressao 1:1.
 - [ ] Conferir HPS-001 contra KiCad.
 - [ ] Rodar ERC/DRC.
 - [ ] Fazer revisao mecanica impressa 1:1.

@@ -37,6 +37,16 @@
 | Conector sensor | 1 | HDB-101 |
 | Test points | 8–12 | debug |
 
+Notas HDB-100:
+
+- `JBAT`, `J_ML` e `J_MR` usam footprint placeholder
+  `PowerConnector_1x02_3p5`; substituir pelo conector real antes de Gerber.
+- `SW_PWR` usa `SlideSwitch_SPST_8x4`; confirmar corrente e fixacao mecanica.
+- `CBULK1` usa `BulkCap_Radial_D10_P5`; confirmar diametro, altura e colisao
+  com bateria/Brain Board.
+- `J_FAN` esta como header 1x04: `VMOTOR`, `GND`, `FAN_PWM`, `5V_IN`; ajustar
+  quando fan/ESC real for escolhido.
+
 ## HDB-101
 
 | Item | Qtd | Observação |

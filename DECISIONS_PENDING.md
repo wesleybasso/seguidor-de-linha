@@ -1,6 +1,6 @@
 # DECISIONS_PENDING.md - Pendencias E Travamentos PEGASUS Rev A0
 
-Atualizado: 2026-07-06.
+Atualizado: 2026-07-08.
 
 ## P0 - Travamentos Antes De PCB Fabricavel
 
@@ -16,6 +16,10 @@ Atualizado: 2026-07-06.
 - Definir conectores reais de motor, fan/ESC, sensor, XT30, chave e
   board-to-board.
 - Definir estrategia de GND: potencia, analogico e ponto comum.
+- Confirmar se a succao Rev A0 sera fan/ESC pronto, motor DC com `Q_FAN`, ou
+  apenas area mecanica sem acionamento na primeira fabricacao.
+- Validar se `CBULK1` cabe perto do TB6612 sem colidir com bateria, Brain Board
+  ou fixacao mecanica.
 
 ## P0 - Travamentos Antes De Bancada Com Atuadores
 

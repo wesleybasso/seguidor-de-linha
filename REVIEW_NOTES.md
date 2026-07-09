@@ -39,3 +39,27 @@ do outro; achados viram nota aqui e o dono decide.
 - `TELEMETRY_BASIC` envia `battery_mv = 0` (medição de bateria indefinida —
   pendência já aberta). Quando decidirem divisor/ADC, atualizar HCP-001 se
   a semântica mudar.
+
+---
+
+## 2026-07-08 — Codex (hardware/PCB sem bancada fisica)
+
+### HDB-100 - avancado como maquete KiCad, nao fabricavel
+
+- Adicionados placeholders para `JBAT`, `SW_PWR`, `CBULK1`, `J_ML`, `J_MR` e
+  `J_FAN`.
+- Criada net `VBAT_RAW` para separar entrada LiPo crua de `VMOTOR` chaveado.
+- Adicionados textos de revisao no PCB para corredor de potencia, corredor
+  analogico e decisao pendente de `Q_FAN`/ESC.
+- Nao foi gerado Gerber e a placa continua bloqueada ate medicao real.
+- DRC KiCad 9.0.3 em `HDB-100_Chassis_Power_Board.kicad_pcb`: sem curto e
+  sem courtyard overlap apos reposicionamento; ainda existem 54 desconexoes e
+  38 warnings de placeholder/silk/texto.
+
+### Pontos para revisao humana
+
+- `CBULK1` pode colidir com bateria/Brain Board dependendo da altura real.
+- `J_FAN` esta como header 1x04 generico; fan/ESC real pode exigir outro
+  conector ou MOSFET dedicado.
+- `PowerConnector_1x02_3p5` representa motor/XT30 apenas como placeholder; nao
+  deve ser usado como footprint final de fabricacao.

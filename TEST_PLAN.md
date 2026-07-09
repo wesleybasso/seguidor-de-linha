@@ -1,15 +1,36 @@
 # TEST_PLAN.md - Plano De Testes PEGASUS Rev A0
 
-Atualizado: 2026-07-06.
+Atualizado: 2026-07-08.
 
 ## Principios
 
+- Enquanto nao houver hardware fisico, testar apenas consistencia KiCad/docs.
 - Primeiro testar sem motores e sem succao.
 - Depois testar potencia com fonte limitada.
 - Depois motores com rodas suspensas.
 - Depois succao isolada.
 - So depois colocar no chao, em velocidade baixa.
 - `STOP_RUN` precisa funcionar em todas as fases com atuadores.
+
+## F-KiCad - Sem Hardware Fisico
+
+Objetivo: preparar a Rev A0 para revisao humana sem gerar Gerber.
+
+Testes:
+
+- Conferir balanceamento de parenteses dos arquivos `.kicad_pcb` e
+  `.kicad_mod`.
+- Conferir se todo placeholder novo esta listado em BOM e pendencias.
+- Conferir se `VBAT_RAW` e `VMOTOR` nao foram misturados sem chave.
+- Conferir visualmente se bateria, chave, XT30, capacitor e conectores estao
+  em regioes plausiveis.
+- Confirmar que documentos continuam dizendo que Gerber final esta bloqueado.
+
+Sucesso:
+
+- KiCad abre os projetos.
+- Nomes de nets e referencias sao legiveis.
+- Toda decisao sem medida real aparece em `DECISIONS_PENDING.md`.
 
 ## F0 - Protoboard Sem Motores
 
@@ -152,4 +173,3 @@ Sucesso:
 - Comportamento repetivel.
 - Logs completos.
 - Sem aquecimento perigoso.
-

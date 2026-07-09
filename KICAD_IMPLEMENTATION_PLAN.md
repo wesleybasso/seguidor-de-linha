@@ -1,6 +1,6 @@
 # KiCad Implementation Plan - PEGASUS Rev A0
 
-Atualizado: 2026-07-06.
+Atualizado: 2026-07-08.
 
 ## Estado Atual Honesto
 
@@ -18,6 +18,20 @@ Atualizado: 2026-07-06.
   para sinais de debug/USART do Black Pill.
 - Foi criado footprint placeholder `PinHeader_1x04_2p54` para headers curtos
   de bancada.
+
+## Atualizacao 2026-07-08
+
+- HDB-100 recebeu placeholders explicitos para `JBAT`, `SW_PWR`, `CBULK1`,
+  `J_ML`, `J_MR` e `J_FAN`.
+- Foi criada a net `VBAT_RAW` para separar entrada LiPo crua de `VMOTOR`
+  chaveado.
+- Foram criados footprints placeholder:
+  `PowerConnector_1x02_3p5`, `BulkCap_Radial_D10_P5` e
+  `SlideSwitch_SPST_8x4`.
+- O PCB recebeu textos de revisao para corredor `VBAT/VMOTOR`, corredor
+  analogico e decisao pendente de `Q_FAN`/ESC.
+- Sprint sem hardware documentado em
+  `docs/OFFLINE_KICAD_SPRINT_2026-07-08.md`.
 
 ## Prioridade Atual
 
@@ -44,6 +58,9 @@ Atualizado: 2026-07-06.
 | Mini360 | 17 x 11 mm | Placeholder |
 | Bateria LiPo | 70 x 38 x 18 mm | Placeholder mecanico |
 | Ventosa | furo D22 mm | Inicial |
+| XT30/conector potencia | 1x02 3.5 mm generico | Placeholder, precisa conector real |
+| Chave geral | SPST 8 x 4 mm generico | Placeholder, precisa chave real |
+| Capacitor bulk | radial D10 P5 | Placeholder, altura e diametro pendentes |
 
 ## HDB-001 Brain Board
 
@@ -80,13 +97,22 @@ Outline:
 
 Bloqueios:
 
-- XT30 real.
+- XT30/conector real.
 - Chave real.
-- Capacitores bulk.
-- Conectores de motor.
+- Capacitores bulk reais.
+- Conectores reais de motor.
 - Fan/ESC real.
 - Pinout TB6612 real.
 - Estrategia de GND e potencia.
+
+Estado de maquete:
+
+- `JBAT` representa entrada LiPo crua em `VBAT_RAW`.
+- `SW_PWR` representa chaveamento de `VBAT_RAW` para `VMOTOR`.
+- `CBULK1` fica em `VMOTOR`/`GND` perto do TB6612.
+- `J_ML` e `J_MR` expõem saidas do TB6612.
+- `J_FAN` expõe `VMOTOR`, `GND`, `FAN_PWM` e `5V_IN` para fan/ESC.
+- `Q_FAN` segue como decisao pendente, nao como circuito real.
 
 ## HDB-101 Sensor Board
 
